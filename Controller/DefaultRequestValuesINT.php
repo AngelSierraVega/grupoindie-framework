@@ -12,7 +12,7 @@ namespace GIndie\Framework\Controller;
  *
  * @version GI-FRMWRK.00.00 18-02-18 Empty interface created.
  * @edit GI-FRMWRK.00.01
- * 
+ * - Created DEFAULT_REQUEST_NAME, DEFAULT_REQUEST_VALUE
  */
 interface DefaultRequestValuesINT
 {
@@ -31,5 +31,12 @@ interface DefaultRequestValuesINT
      * @since GI-FRMWRK.00.01
      */
     const DEFAULT_REQUEST_VALUE = "GI-FRMWRK-RQST-DFLT";
+    
+    /**
+     * 
+     * @var string 
+     * @since GI-FRMWRK.00.02 
+     */
+    const ERROR_REQUEST_NAME = "GI-FRMWRK-ERROR";
 
 }

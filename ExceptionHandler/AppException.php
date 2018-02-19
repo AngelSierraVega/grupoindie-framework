@@ -3,25 +3,28 @@
 namespace GIndie\Framework\ExceptionHandler;
 
 /**
- * DVLP-Framework - UserException
+ * DVLP-Framework - AppException
  *
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
  * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
  *
  * @package Framework
  *
- * @version GI-FRMWRK.00.00 18-02-18 Empty class created.
+ * @version GI-FRMWRK.00.00 18-02-22 
+ * - Empty class created.
+ * @edit GI-FRMWRK.00.01
+ * - Added code from GI-CMMN
  */
-class UserException extends \GIndie\Exception
+class AppException extends \GIndie\Exception
 {
 
     /**
      * 
-     * @factory
-     * @since GI-CMMN.00.03
+     * @param string $message
      * 
-     * @param string $pathToFile
-     * @return \GIndie\Exception
+     * @return \GIndie\Framework\ExceptionHandler\AppException
+     * 
+     * @since GI-FRMWRK.00.01
      */
     public static function defaultError($message)
     {
@@ -30,15 +33,12 @@ class UserException extends \GIndie\Exception
 
     /**
      * 
-     * @since GI-CMMN.00.03
-     * 
      * @param int $constant
      * @param string|null $param1
      * @param string|null $param2
-     * @return string
-     * @edit GI-CMMN.00.04
-     * - Removed static from visibility for using $this.
      * 
+     * @return string
+     * @since GI-FRMWRK.00.01
      */
     protected function handleMessage($constant, $param1 = null, $param2 = null)
     {
@@ -52,14 +52,10 @@ class UserException extends \GIndie\Exception
     }
 
     /**
-     * REQUIRED_VAR
+     * DEFAULT_ERROR
      * 
      * @var int
-     * @since GI-CMMN.00.01
-     * @edit GI-CMMN.00.02
-     * - Renamed to FILE_REQUIRES_VAR from REQUIRED_VAR
-     * @edit GI-CMMN.00.03
-     * - Moved from GIndie\Exception
+     * @since GI-FRMWRK.00.01
      */
     const DEFAULT_ERROR = 0;
 
