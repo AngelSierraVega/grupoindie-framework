@@ -39,13 +39,16 @@ abstract class Controller implements Controller\DefaultRequestValuesINT
      */
     protected static function setUserError($message)
     {
-        static::$requestParameters[static::ERROR_REQUEST_NAME] = $message;
+        if (!isset(static::$requestParameters[static::ERROR_REQUEST_NAME])) {
+            static::$requestParameters[static::ERROR_REQUEST_NAME] = [];
+        }
+        static::$requestParameters[static::ERROR_REQUEST_NAME][] = $message;
         return true;
     }
 
     /**
      * 
-     * @return string|null
+     * @return array|null
      * 
      * @since GI-FRMWRK.00.02
      */
@@ -183,9 +186,10 @@ abstract class Controller implements Controller\DefaultRequestValuesINT
         $widget = new \GIndie\ScriptGenerator\Dashboard\Widget\FormWidget($form, $submit);
         $widget->getHeading()->setTitle($title);
         if (static::getUserError() !== null) {
-            $alert = Bootstrap3\Component\Alert::warning(static::getUserError());
-            $body = new Bootstrap3\Component\Panel\Body($alert);
-            $widget->getHeadingBody()->addContent($body);
+            foreach (static::getUserError() as $error) {
+                $alert = Bootstrap3\Component\Alert::warning($error);
+                $widget->getHeadingBody()->addContent($alert);
+            }
         }
         return $widget;
     }

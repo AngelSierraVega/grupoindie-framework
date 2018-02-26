@@ -20,6 +20,8 @@ use GIndie\ScriptGenerator\HTML5\Category\StylesSemantics;
  * - Created instanceWithWebSources()
  * @edit GI-FRMWRK.00.03 18-02-20
  * - Created configCSS(), configJS(), assetsFolder()
+ * @edit GI-FRMWRK.00.04 18-02-25
+ * - Added functional footbar
  */
 abstract class DOM extends Dashboard\Document
 {
@@ -64,10 +66,10 @@ abstract class DOM extends Dashboard\Document
         $this->container->addClass("container");
         static::configCSS();
         static::configJS();
-        /**
-         * @todo 
-         * $this->_footbar = $this->addContentGetPointer(new Document\Footbar("[gip-footbar]"));
-         */
+        $this->footbar = $this->addContentGetPointer(new \GIndie\ScriptGenerator\Bootstrap3\Component\Navbar(false));
+        $this->footbar->addClass("navbar-fixed-bottom");
+
+        $this->getBody()->setAttribute("style", "padding-bottom: 55px;");
     }
 
     /**
