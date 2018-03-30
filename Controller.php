@@ -65,14 +65,37 @@ abstract class Controller implements Controller\DefaultRequestValuesINT
 
     /**
      * 
+     * @param type $callable
+     * @param type $requestCode
+     * @since 18-03-30
+     */
+    public static function configGetRequest($callable, $requestCode = null)
+    {
+        return self::configRequestHandler("GET", $callable, $requestCode);
+    }
+    
+    /**
+     * 
+     * @param type $callable
+     * @param type $requestCode
+     * @since 18-03-30
+     */
+    public static function configPostRequest($callable, $requestCode = null)
+    {
+        return self::configRequestHandler("POST", $callable, $requestCode);
+    }
+
+    /**
+     * 
      * @param string $requestMethod
      * @param string $callable
      * @param string|null $requestCode
      * @return boolean
      * @throws \Exception
      * @since GI-FRMWRK.00.01
+     * @edit 18-03-30 
      */
-    public static function configRequestHandler($requestMethod, $callable, $requestCode = null)
+    private static function configRequestHandler($requestMethod, $callable, $requestCode = null)
     {
         switch (true)
         {
@@ -88,31 +111,36 @@ abstract class Controller implements Controller\DefaultRequestValuesINT
 
     /**
      * 
-     * @param array $parameters
      * @since GI-FRMWRK.00.01
+     * @edit 18-03-29
+     * - Removed method param $parameters
+     * - Renamed method from handleRequestGet to runGetRequest
      */
-    private static function handleRequestGet(array $parameters)
+    private static function runGetRequest()
     {
+        $parameters = self::$requestParameters;
         if (!isset($parameters["GET"][self::DEFAULT_REQUEST_NAME])) {
             $parameters["GET"][self::DEFAULT_REQUEST_NAME] = self::DEFAULT_REQUEST_VALUE;
         }
         $requestCode = $parameters["GET"][self::DEFAULT_REQUEST_NAME];
-        self::$requestParameters = $parameters;
+
         return \call_user_func(self::$requestHandlers["GET"][$requestCode]);
     }
 
     /**
      * 
-     * @param array $parameters
      * @since GI-FRMWRK.00.01
+     * @edit 18-03-29
+     * - Removed method param $parameters
+     * - Renamed method from handleRequestPost to runPostRequest
      */
-    private static function handleRequestPost(array $parameters)
+    private static function runPostRequest()
     {
+        $parameters = self::$requestParameters;
         if (!isset($parameters[self::DEFAULT_REQUEST_NAME])) {
             $parameters[self::DEFAULT_REQUEST_NAME] = self::DEFAULT_REQUEST_VALUE;
         }
         $requestCode = $parameters[self::DEFAULT_REQUEST_NAME];
-        self::$requestParameters = $parameters;
         return \call_user_func(self::$requestHandlers["POST"][$requestCode]);
     }
 
@@ -133,30 +161,52 @@ abstract class Controller implements Controller\DefaultRequestValuesINT
 
     /**
      * 
+     * @param string $requestMethod
+     * @return null|mixed
+     * @since 18-03-29
+     */
+    protected static function runUserRequest($requestMethod)
+    {
+        static::$response = null;
+        switch ($requestMethod)
+        {
+            case "GET":
+                static::$requestParameters = self::sanitize($_GET);
+                static::$response = self::runGetRequest();
+                break;
+            case "POST":
+                static::$requestParameters = self::sanitize($_POST);
+                static::$response = self::runPostRequest();
+                break;
+        }
+        return static::$response;
+    }
+
+    /**
+     *
+     * @var mixed|null 
+     * @since 18-03-29
+     */
+    protected static $response;
+
+    /**
+     * 
      * @return type
      * @since GI-FRMWRK.00.01
+     * @edit 18-03-29
+     * - Exploded code into handleRequest()
      */
     public static function run()
     {
         isset(self::$requestHandlers) ?: static::config();
-        $response = null;
-        try {
-            switch ($_SERVER["REQUEST_METHOD"])
-            {
-                case "GET":
-                    $response = self::handleRequestGet(self::sanitize($_GET));
-                    break;
-                case "POST":
-                    $response = self::handleRequestPost(self::sanitize($_POST));
-                    break;
-            }
-        } catch (ExceptionHandler\UserException $exc) {
-            $response = $exc->getMessage();
-        }
         $DOM = static::getDOM();
-        $DOM->addContent($response);
+        try {
+            static::runUserRequest($_SERVER["REQUEST_METHOD"]);
+        } catch (ExceptionHandler\UserException $exc) {
+            static::$response = $exc->getMessage();
+        }
+        $DOM->addContent(static::$response);
         return $DOM;
-        return $response;
     }
 
     /**
