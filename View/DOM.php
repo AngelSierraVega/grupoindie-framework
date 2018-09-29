@@ -1,29 +1,36 @@
 <?php
 
+/**
+ * GI-Framework-DVLP - DOM
+ *
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
+ *
+ * @package \GIndie\Framework\View
+ *
+ * @version 00.A0
+ * @since 18-02-17
+ */
+
 namespace GIndie\Framework\View;
 
 use GIndie\ScriptGenerator\Dashboard;
 use GIndie\ScriptGenerator\HTML5\Category\StylesSemantics;
 
 /**
- * DVLP-Framework - DOM
  *
- * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
- * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
- *
- * @package Framework
- *
- * @version GI-FRMWRK.00.00 18-02-17 Empty class created.
- * @edit GI-FRMWRK.00.01
+ * @edit 18-02-17
  * - Added code from FacturacionExterna\DOM
- * @edit GI-FRMWRK.00.02 18-02-19
+ * @edit 18-02-19
  * - Created instanceWithWebSources()
- * @edit GI-FRMWRK.00.03 18-02-20
+ * @edit 18-02-20
  * - Created configCSS(), configJS(), assetsFolder()
- * @edit GI-FRMWRK.00.04 18-02-25
+ * @edit 18-02-25
  * - Added functional footbar
+ * @edit 18-09-29
+ * - Upgraded class dockblock
  */
-abstract class DOM extends Dashboard\Document
+class DOM extends Dashboard\Document
 {
 
     /**
@@ -33,7 +40,7 @@ abstract class DOM extends Dashboard\Document
      * 
      * @return \GIndie\Framework\View\DOM
      * 
-     * @since GI-FRMWRK.00.02
+     * @since 18-02-19
      */
     public static function instanceWithWebSources($title, $lang = "en")
     {
@@ -49,11 +56,10 @@ abstract class DOM extends Dashboard\Document
      * @param type $pathToJquery
      * @param type $pathToJS
      * 
-     * @since GI-FRMWRK.00.01
-     * @edit GI-FRMWRK.00.03
+     * @since 18-02-17
+     * @edit 18-02-20
      */
-    public function __construct($title, $lang = "en", $pathToCSS = null, $pathToTheme = null,
-                                $pathToJquery = null, $pathToJS = null)
+    public function __construct($title, $lang = "en", $pathToCSS = null, $pathToTheme = null, $pathToJquery = null, $pathToJS = null)
     {
         parent::__construct($title, $lang, $pathToCSS, $pathToTheme, $pathToJquery, $pathToJS);
 
@@ -73,7 +79,7 @@ abstract class DOM extends Dashboard\Document
     }
 
     /**
-     * @since GI-FRMWRK.00.03
+     * @since 18-02-20
      */
     public function configCSS()
     {
@@ -81,7 +87,7 @@ abstract class DOM extends Dashboard\Document
     }
 
     /**
-     * @since GI-FRMWRK.00.03
+     * @since 18-02-20
      */
     public function configJS()
     {
@@ -89,16 +95,19 @@ abstract class DOM extends Dashboard\Document
     }
 
     /**
-     * @since GI-FRMWRK.00.03
+     * @since 18-02-20
      */
-    abstract public static function assetsFolder();
+    public static function assetsFolder()
+    {
+        
+    }
 
     /**
      * 
      * @param type $content
      * @return $this
      * 
-     * @since GI-FRMWRK.00.01
+     * @since 18-02-17
      */
     public function addContent($content)
     {
@@ -110,14 +119,14 @@ abstract class DOM extends Dashboard\Document
      * 
      * @var \GIndie\ScriptGenerator\HTML5\Category\StylesSemantics\Div 
      * 
-     * @since GI-FRMWRK.00.01
+     * @since 18-02-17
      */
     private $container;
 
     /**
      * 
      * @return \GIndie\ScriptGenerator\Bootstrap3\Component\Navbar 
-     * @since GI-FRMWRK.00.03
+     * @since 18-02-20
      */
     public function getTopbar()
     {
@@ -127,14 +136,14 @@ abstract class DOM extends Dashboard\Document
     /**
      *
      * @var \GIndie\ScriptGenerator\Bootstrap3\Component\Navbar 
-     * @since GI-FRMWRK.00.03
+     * @since 18-02-20
      */
     private $topbar;
 
     /**
      * 
      * @return \GIndie\ScriptGenerator\Bootstrap3\Component\Navbar 
-     * @since GI-FRMWRK.00.03
+     * @since 18-02-20
      */
     public function getFootbar()
     {
@@ -145,7 +154,7 @@ abstract class DOM extends Dashboard\Document
      *
      * @var \GIndie\ScriptGenerator\Bootstrap3\Component\Navbar  
      * 
-     * @since GI-FRMWRK.00.03
+     * @since 18-02-20
      */
     private $footbar;
 

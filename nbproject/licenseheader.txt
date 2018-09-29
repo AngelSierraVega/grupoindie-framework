@@ -9,9 +9,10 @@ ${licensePrefix?replace(" +$", "", "r")}
 ${licensePrefix}@author Angel Sierra Vega <angel.sierra@grupoindie.com>
 ${licensePrefix}@copyright (c) ${date?date?string("yyyy")} Angel Sierra Vega. Grupo INDIE.
 ${licensePrefix?replace(" +$", "", "r")}
-${licensePrefix}@package Framework
+${licensePrefix}@package \GIndie\Framework
 ${licensePrefix?replace(" +$", "", "r")}
-${licensePrefix}@version GI-FRMWRK.00.00 ${date?date?string("yy-MM-dd")} Empty [class/trait/interface/file] created.
+${licensePrefix}@version 00.00
+${licensePrefix}@since ${date?date?string("yy-MM-dd")}
 <#if licenseLast??>
 ${licenseLast}
 </#if>

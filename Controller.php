@@ -1,33 +1,39 @@
 <?php
 
+/**
+ * GI-Framework-DVLP - Controller
+ *
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
+ *
+ * @package \GIndie\Framework\Controller
+ * 
+ * @version 00.A4
+ * @since 18-02-17
+ */
+
 namespace GIndie\Framework;
 
 use GIndie\ScriptGenerator\Bootstrap3;
 
 /**
- * DVLP-Framework - Controller
  *
- * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
- * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
- *
- * @package Framework
- *
- * @version GI-FRMWRK.00.00 18-02-17 
- * - Empty class created.
- * @edit GI-FRMWRK.00.01
+ * @edit 18-02-17
  * - Abstract class
  * - Created configRequestHandler(), handleRequestGet(), handleRequestPost(), run(), config()
  * - Created $DEFAULT_REQUEST_NAME, $DEFAULT_REQUEST_VALUE, $requestHandlers, $requestParameters
- * @edit GI-FRMWRK.00.02 18-02-18
+ * @edit 18-02-18
  * - Class implements DefaultRequestValues
  * - Created setUserError(), getUserError()
- * @edit GI-FRMWRK.00.03 18-02-20
+ * @edit 18-02-20
  * - Created widgetForm(), getDOM(), inputText()
  * - Updated run()
- * @edit GI-FRMWRK.00.04 18-02-23
+ * @edit 18-02-23
  * - Created sanitize()
+ * @edit 18-09-29
+ * - Upgraded class dockblock
  */
-abstract class Controller implements Controller\DefaultRequestValuesINT
+abstract class Controller implements Controller\DefaultRequestValuesINT, Controller\ControllerINT
 {
 
     /**
@@ -35,7 +41,7 @@ abstract class Controller implements Controller\DefaultRequestValuesINT
      * @param string $message
      * @return boolean
      * 
-     * @since GI-FRMWRK.00.02
+     * @since 18-02-18
      */
     protected static function setUserError($message)
     {
@@ -50,18 +56,13 @@ abstract class Controller implements Controller\DefaultRequestValuesINT
      * 
      * @return array|null
      * 
-     * @since GI-FRMWRK.00.02
+     * @since 18-02-18
      */
     protected static function getUserError()
     {
         return isset(static::$requestParameters[static::ERROR_REQUEST_NAME]) ?
                 static::$requestParameters[static::ERROR_REQUEST_NAME] : null;
     }
-
-    /**
-     * @since GI-FRMWRK.00.01
-     */
-    abstract public static function config();
 
     /**
      * 
@@ -73,7 +74,7 @@ abstract class Controller implements Controller\DefaultRequestValuesINT
     {
         return self::configRequestHandler("GET", $callable, $requestCode);
     }
-    
+
     /**
      * 
      * @param type $callable
@@ -92,7 +93,7 @@ abstract class Controller implements Controller\DefaultRequestValuesINT
      * @param string|null $requestCode
      * @return boolean
      * @throws \Exception
-     * @since GI-FRMWRK.00.01
+     * @since 18-02-17
      * @edit 18-03-30 
      */
     private static function configRequestHandler($requestMethod, $callable, $requestCode = null)
@@ -111,36 +112,45 @@ abstract class Controller implements Controller\DefaultRequestValuesINT
 
     /**
      * 
-     * @since GI-FRMWRK.00.01
+     * @since 18-02-17
      * @edit 18-03-29
      * - Removed method param $parameters
      * - Renamed method from handleRequestGet to runGetRequest
+     * @edit 19-02-02
+     * - Debuged method 
      */
     private static function runGetRequest()
-    {
-        $parameters = self::$requestParameters;
-        if (!isset($parameters["GET"][self::DEFAULT_REQUEST_NAME])) {
-            $parameters["GET"][self::DEFAULT_REQUEST_NAME] = self::DEFAULT_REQUEST_VALUE;
-        }
-        $requestCode = $parameters["GET"][self::DEFAULT_REQUEST_NAME];
-
-        return \call_user_func(self::$requestHandlers["GET"][$requestCode]);
-    }
-
-    /**
-     * 
-     * @since GI-FRMWRK.00.01
-     * @edit 18-03-29
-     * - Removed method param $parameters
-     * - Renamed method from handleRequestPost to runPostRequest
-     */
-    private static function runPostRequest()
     {
         $parameters = self::$requestParameters;
         if (!isset($parameters[self::DEFAULT_REQUEST_NAME])) {
             $parameters[self::DEFAULT_REQUEST_NAME] = self::DEFAULT_REQUEST_VALUE;
         }
         $requestCode = $parameters[self::DEFAULT_REQUEST_NAME];
+        return \call_user_func(self::$requestHandlers["GET"][$requestCode]);
+    }
+
+    /**
+     * 
+     * @since 18-02-17
+     * @edit 18-03-29
+     * - Removed method param $parameters
+     * - Renamed method from handleRequestPost to runPostRequest
+     * @edit 18-04-09
+     * - Added error handlers
+     */
+    private static function runPostRequest()
+    {
+        if (!isset(self::$requestHandlers["POST"])) {
+            \trigger_error("You must use configPostRequest in controller " . static::class, \E_USER_ERROR);
+        }
+        $parameters = self::$requestParameters;
+        if (!isset($parameters[self::DEFAULT_REQUEST_NAME])) {
+            $parameters[self::DEFAULT_REQUEST_NAME] = self::DEFAULT_REQUEST_VALUE;
+        }
+        $requestCode = $parameters[self::DEFAULT_REQUEST_NAME];
+        if (!isset(self::$requestHandlers["POST"][$requestCode])) {
+            \trigger_error("Post request code '{$requestCode}' not defined.", \E_USER_ERROR);
+        }
         return \call_user_func(self::$requestHandlers["POST"][$requestCode]);
     }
 
@@ -149,7 +159,7 @@ abstract class Controller implements Controller\DefaultRequestValuesINT
      * @param array $data
      * @return array
      * 
-     * @since GI-FRMWRK.00.04
+     * @since 18-02-23
      */
     private static function sanitize(array $data)
     {
@@ -192,7 +202,7 @@ abstract class Controller implements Controller\DefaultRequestValuesINT
     /**
      * 
      * @return type
-     * @since GI-FRMWRK.00.01
+     * @since 18-02-17
      * @edit 18-03-29
      * - Exploded code into handleRequest()
      */
@@ -213,7 +223,7 @@ abstract class Controller implements Controller\DefaultRequestValuesINT
      * 
      * @return \GIndie\Framework\View\DOM
      * 
-     * @since GI-FRMWRK.00.03
+     * @since 18-02-20
      */
     protected static function getDOM()
     {
@@ -228,10 +238,9 @@ abstract class Controller implements Controller\DefaultRequestValuesINT
      * 
      * @return \GIndie\ScriptGenerator\Dashboard\Widget\FormWidget
      * 
-     * @since GI-FRMWRK.00.03
+     * @since 18-02-20
      */
-    protected static function widgetForm($title, \GIndie\ScriptGenerator\Dashboard\FormInput\Form $form,
-                                         $submit = false)
+    protected static function widgetForm($title, \GIndie\ScriptGenerator\Dashboard\FormInput\Form $form, $submit = false)
     {
         $widget = new \GIndie\ScriptGenerator\Dashboard\Widget\FormWidget($form, $submit);
         $widget->getHeading()->setTitle($title);
@@ -247,14 +256,14 @@ abstract class Controller implements Controller\DefaultRequestValuesINT
     /**
      *
      * @var array 
-     * @since GI-FRMWRK.00.01
+     * @since 18-02-17
      */
     private static $requestHandlers;
 
     /**
      *
      * @var array 
-     * @since GI-FRMWRK.00.01
+     * @since 18-02-17
      */
     protected static $requestParameters;
 

@@ -1,24 +1,23 @@
 <?php
 
 /**
- * DVLP-Framework - AutoloaderFramework
+ * GI-Framework-DVLP - AutoloaderFramework
  *
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
  * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
  *
- * @package Framework
- *
- * @version GI-FRMWRK.00.00 18-02-17 Empty file created.
- * @edit GI-FRMWRK.00.01
- * - Added code from WSTFacturacionExterna
+ * @package \GIndie\Framework
+ * 
+ * @version 00.A0
+ * @since 18-02-17
  */
 
 namespace GIndie\Framework;
 
 /**
  * Autoloader function
- * 
- * @since GI-FRMWRK.00.01
+ * @edit 18-09-29
+ * - Upgraded class dockblock
  */
 \spl_autoload_register(function($className) {
     switch (\substr($className, 0, (\strlen(__NAMESPACE__) * 1)))

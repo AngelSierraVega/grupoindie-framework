@@ -1,0 +1,45 @@
+18-10-18 to 19-12-29
+18-11-07
+- Upgraded project versions
+18-11-11
+- View\Table handles columns in displayArray
+19-12-20
+- Created View\FormnInput\InstanceFromDBHandler.php
+- Created Model\Attribute.php
+19-12-29
+- Upgraded project version
+
+-------------------------------PROJECT---------------------------------|
+\GIndie\Framework
+19-12-29 v:00.6C LOC:1828
+ABS(1) CLA(17) INT(3) SCR(1) TRA(0) LOG(0) NDF(0) 
+-------------------------------VERSIONS--------------------------------|
+[00.01] Cero.........| Cero
+[00.50] FP-FE........| Functional project: Facturación Externa
+[00.6C] INT-DBHNDLR..| 19-12-29 Started integration with DBHandler
+[01.00] One..........| Release
+--------------------------------FILE-----------------------------|--V--|
+[SCR] AutoloaderFramework.php....................................|00.A0|
+[CLA] ExceptionHandler\AppException.php..........................|00.70|
+[CLA] ExceptionHandler\UserException.php.........................|00.70|
+[INT] Controller\ControllerINT.php...............................|00.3A|
+[INT] Controller\DefaultRequestValuesINT.php.....................|00.A0|
+[CLA] Controller\Widget\WidgetSearch.php.........................|DOING|
+[ABS] Controller.php.............................................|00.A4|
+[INT] DataDefinitionFramework\Model\Attribute.php................|DOING|
+[CLA] Model\ListNested.php.......................................|00.0A|
+[CLA] Model\ListSimple.php.......................................|00.0A|
+[CLA] Model\Record.php...........................................|00.0A|
+[CLA] Model\Table.php............................................|00.0A|
+[CLA] ProjectHandler.php.........................................|00.6C|
+[CLA] View\Alert.php.............................................|00.A0|
+[CLA] View\DOM.php...............................................|00.A0|
+[CLA] View\FormInput\Form.php....................................|00.A0|
+[CLA] View\FormInput\InstanceFromDBHandler.php...................|00.A0|
+[CLA] View\FormInput\InstanceFromPlatformRecord.php..............|00.70|
+[CLA] View\FormInput.php.........................................|00.A4|
+[CLA] View\Icons.php.............................................|00.04|
+[CLA] View\Table.php.............................................|00.B0|
+[CLA] View\Widget.php............................................|00.A0|
+-----------------------------------------------------------------------|
+ \GIndie\Framework v 00.6C

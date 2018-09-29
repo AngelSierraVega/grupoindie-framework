@@ -1,0 +1,32 @@
+18-09-29
+- Upgraded project version and docblocks
+
+-------------------------------PROJECT---------------------------------|
+\GIndie\Framework
+18-09-29 v:00.6B LOC:1204
+ABS(1) CLA(13) INT(2) SCR(1) TRA(0) NDF(1)
+-------------------------------VERSIONS--------------------------------|
+[0A.00] AlphaCero....| Functional project
+[0B.00] BetaCero.....| Main funcionality
+[0C.00] One..........| Final version
+--------------------------------FILE-----------------------------|--V--|
+[SCR] AutoloaderFramework.php....................................|00.A0|
+[CLA] ExceptionHandler\AppException.php..........................|00.70|
+[CLA] ExceptionHandler\UserException.php.........................|00.70|
+[NDF] Components\ProjectHandler\006B.............................|NDFND|
+[INT] Controller\ControllerINT.php...............................|00.30|
+[INT] Controller\DefaultRequestValuesINT.php.....................|00.A0|
+[ABS] Controller.php.............................................|00.A0|
+[CLA] Model\ListNested.php.......................................|00.01|
+[CLA] Model\ListSimple.php.......................................|00.01|
+[CLA] Model\Record.php...........................................|00.01|
+[CLA] Model\Table.php............................................|00.01|
+[CLA] ProjectHandler.php.........................................|00.70|
+[CLA] View\Alert.php.............................................|00.A0|
+[CLA] View\DOM.php...............................................|00.A0|
+[CLA] View\FormInput\Form.php....................................|00.A0|
+[CLA] View\FormInput.php.........................................|00.A0|
+[CLA] View\Table.php.............................................|00.A0|
+[CLA] View\Widget.php............................................|00.A0|
+-----------------------------------------------------------------------|
+ \GIndie\Framework v 00.6B

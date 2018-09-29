@@ -1,16 +1,22 @@
 <?php
 
-namespace GIndie\Framework\Model;
-
 /**
- * DVLP-Framework - Table
+ * GI-Framework-DVLP - Record
  *
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
  * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
  *
- * @package Framework
- *
- * @version GI-FRMWRK.00.00 18-02-17 Empty class created.
+ * @package \GIndie\Framework\Model
+ * 
+ * @version 00.0A
+ * @since 18-02-17
+ */
+
+namespace GIndie\Framework\Model;
+
+/**
+ * @edit 18-09-29
+ * - Upgraded class dockblock
  */
 class Table
 {

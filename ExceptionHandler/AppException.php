@@ -1,19 +1,24 @@
 <?php
 
-namespace GIndie\Framework\ExceptionHandler;
-
 /**
- * DVLP-Framework - AppException
+ * GI-Framework-DVLP - AppException
  *
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
  * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
  *
- * @package Framework
- *
- * @version GI-FRMWRK.00.00 18-02-22 
- * - Empty class created.
- * @edit GI-FRMWRK.00.01
+ * @package \GIndie\Framework
+ * 
+ * @version 00.70
+ * @since 18-02-22
+ */
+
+namespace GIndie\Framework\ExceptionHandler;
+
+/**
+ * @edit 18-02-22
  * - Added code from GI-CMMN
+ * @edit 18-09-29
+ * - Upgraded class dockblock
  */
 class AppException extends \GIndie\Exception
 {
@@ -24,7 +29,7 @@ class AppException extends \GIndie\Exception
      * 
      * @return \GIndie\Framework\ExceptionHandler\AppException
      * 
-     * @since GI-FRMWRK.00.01
+     * @since 18-02-22
      */
     public static function defaultError($message)
     {
@@ -38,7 +43,7 @@ class AppException extends \GIndie\Exception
      * @param string|null $param2
      * 
      * @return string
-     * @since GI-FRMWRK.00.01
+     * @since 18-02-22
      */
     protected function handleMessage($constant, $param1 = null, $param2 = null)
     {
@@ -55,7 +60,7 @@ class AppException extends \GIndie\Exception
      * DEFAULT_ERROR
      * 
      * @var int
-     * @since GI-FRMWRK.00.01
+     * @since 18-02-22
      */
     const DEFAULT_ERROR = 0;
 
