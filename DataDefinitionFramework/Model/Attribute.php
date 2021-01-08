@@ -4,11 +4,12 @@
  * GI-FRMWRK - Attribute
  *
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
- * @copyright (c) 2019 Angel Sierra Vega. Grupo INDIE.
+ * @copyright (CC) 2020 Angel Sierra Vega. Grupo INDIE.
+ * @license file://LICENSE
  *
  * @package \GIndie\Framework\DataDefinition
  *
- * @version DOING
+ * @version 00.70
  */
 
 namespace GIndie\Framework\DataDefinitionFramework\Model;

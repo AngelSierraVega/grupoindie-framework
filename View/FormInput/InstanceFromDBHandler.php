@@ -4,7 +4,8 @@
  * GI-FRMWRK - InstanceFromDBHandler
  *
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
- * @copyright (c) 2019 Angel Sierra Vega. Grupo INDIE.
+ * @copyright (CC) 2020 Angel Sierra Vega. Grupo INDIE.
+ * @license file://LICENSE
  *
  * @package \GIndie\Framework\View
  *
@@ -30,7 +31,57 @@ class InstanceFromDBHandler
      * 
      * @param $table
      * @return \GIndie\Framework\View\FormInput\Form
+     * @since 20-03-05
+     */
+    public static function getFormFilter($table,$columns)
+    {
+        if (\is_subclass_of($table, Table::class, false)) {
+            $form = new Form();
+            foreach ($columns as $columnName => $columnDefinition) {
+                
+                $ref = $table->referenceDefinition();
+                $foreignKeys = $ref->getForeignKeys();
+                if (\array_key_exists($columnName, $foreignKeys)) {
+                    $instanceTable = $foreignKeys[$columnName];
+                    $instanceTable = $instanceTable::instance();
+                    $select = static::getSelect($columnName, $columnDefinition, $instanceTable);
+                    $inputGroup = new \GIndie\ScriptGenerator\Bootstrap3\FormInput\InputGroup($select, $table::TABLE);
+                    $formGroup = new \GIndie\ScriptGenerator\Bootstrap3\FormInput\FormGroup($columnName, $inputGroup);
+                    $form->addContent($formGroup);
+                    //$form->addContent(static::getSelect($columnName, $columnDefinition, $instanceTable));
+                } else {
+                    $form->addContent(static::getInputGroup($columnName, $columnDefinition, $table::TABLE));
+                }
+            }
+        } else {
+            \trigger_error("Invalid object", \E_USER_ERROR);
+        }
+        return $form;
+    }
+
+    /**
+     * 
+     * @param string $columnName
+     * @param ColumnDefinition $columnDefinition
+     * @since 20-03-05
+     */
+    public static function getInputGroup($columnName, ColumnDefinition $columnDefinition, $tableName)
+    {
+        $label = $columnName;
+        $name = $columnName;
+        $input = static::getInput($columnName, $columnDefinition);
+        $inputGroup = new \GIndie\ScriptGenerator\Bootstrap3\FormInput\InputGroup($input, $tableName);
+        $formGroup = new \GIndie\ScriptGenerator\Bootstrap3\FormInput\FormGroup($label, $inputGroup);
+        return $formGroup;
+        return $inputGroup;
+    }
+
+    /**
+     * 
+     * @param $table
+     * @return \GIndie\Framework\View\FormInput\Form
      * @since 19-12-20
+     * @edit 19-12-29
      */
     public static function getForm($table)
     {
@@ -38,9 +89,16 @@ class InstanceFromDBHandler
             $form = new Form();
             foreach ($table->columns() as $columnName => $columnDefinition) {
                 $ref = $table->referenceDefinition();
-                if (\array_key_exists($columnName, $ref->getForeignKeys())) {
-                    $form->addContent("<div>LLAVE FORANEA</div>");
-                }else{
+                $foreignKeys = $ref->getForeignKeys();
+                if (\array_key_exists($columnName, $foreignKeys)) {
+                    $instanceTable = $foreignKeys[$columnName];
+                    $instanceTable = $instanceTable::instance();
+                    $select = static::getSelect($columnName, $columnDefinition, $instanceTable);
+                    $formGroup = new \GIndie\ScriptGenerator\Bootstrap3\FormInput\FormGroup($columnName, $select);
+                    $form->addContent($formGroup);
+                    //return $formGroup;
+                    //$form->addContent(static::getSelect($columnName, $columnDefinition, $instanceTable));
+                } else {
                     $form->addContent(static::getFormGroup($columnName, $columnDefinition));
                 }
             }
@@ -52,6 +110,44 @@ class InstanceFromDBHandler
 
     /**
      * 
+     * @param type $columnName
+     * @param type $columnDefinition
+     * @param Table $table
+     * @return \GIndie\ScriptGenerator\Bootstrap3\FormInput\FormGroup
+     * @since 19-12-29
+     */
+    public static function getSelect($columnName, ColumnDefinition $columnDefinition, Table $referencedTable)
+    {
+        $label = $columnName;
+        if ($columnDefinition->getNotNull() == true) {
+            $options = [];
+        } else {
+            $options = ["NULL" => "Sin definir"];
+        }
+        $selectors = [];
+        $selectors[] = "`" . $referencedTable->referenceDefinition()->getPrimaryKeyName() . "`";
+        $uniqueKey = $referencedTable->referenceDefinition()->getUniqueKeyName();
+        if (\is_array($uniqueKey)) {//COALESCE(`columna`,'')
+            $tmpSelect = "CONCAT(COALESCE(" . \join(",''),'|',COALESCE(", $uniqueKey) . ",'')) AS DISPLAY";
+            $selectors[] = $tmpSelect;
+        } else {
+            $selectors[] = "`{$uniqueKey}` AS DISPLAY";
+        }
+        $assoc = $referencedTable->fetchAssoc($selectors, [], []);
+        foreach ($assoc as $key => $value) {
+            $options[$key] = $value["DISPLAY"];
+        }
+        $select = new \GIndie\ScriptGenerator\HTML5\Category\FormElement\Select($options);
+        $select->setId($columnName);
+        $select->setName($columnName);
+        return $select;
+        $formGroup = new \GIndie\ScriptGenerator\Bootstrap3\FormInput\FormGroup($label, $select);
+        return $formGroup;
+    }
+
+    /**
+     * 
+     * @param string $columnName
      * @param ColumnDefinition $columnDefinition
      * @return \GIndie\ScriptGenerator\Bootstrap3\FormInput\FormGroup
      * @since 19-12-20

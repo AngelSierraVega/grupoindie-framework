@@ -4,11 +4,12 @@
  * GI-Framework-DVLP - WidgetSearch
  *
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
- * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
+ * @copyright (CC) 2020 Angel Sierra Vega. Grupo INDIE.
+ * @license file://LICENSE
  *
  * @package \GIndie\Framework\Controller
  *
- * @version DOING
+ * @version DEPRECATED
  * @since 18-10-18
  */
 
