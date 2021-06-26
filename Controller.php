@@ -1,5 +1,4 @@
 <?php
-
 /**
  * GI-Framework-DVLP - Controller
  *
@@ -9,7 +8,7 @@
  *
  * @package \GIndie\Framework\Controller
  * 
- * @version 00.A4
+ * @version 00.A6
  * @since 18-02-17
  */
 
@@ -34,8 +33,7 @@ use GIndie\ScriptGenerator\Bootstrap3;
  * @edit 18-09-29
  * - Upgraded class dockblock
  */
-abstract class Controller implements Controller\DefaultRequestValuesINT, Controller\ControllerINT
-{
+abstract class Controller implements Controller\DefaultRequestValuesINT, Controller\ControllerINT {
 
     /**
      * 
@@ -44,8 +42,7 @@ abstract class Controller implements Controller\DefaultRequestValuesINT, Control
      * 
      * @since 18-02-18
      */
-    protected static function setUserError($message)
-    {
+    protected static function setUserError($message) {
         if (!isset(static::$requestParameters[static::ERROR_REQUEST_NAME])) {
             static::$requestParameters[static::ERROR_REQUEST_NAME] = [];
         }
@@ -59,8 +56,7 @@ abstract class Controller implements Controller\DefaultRequestValuesINT, Control
      * 
      * @since 18-02-18
      */
-    protected static function getUserError()
-    {
+    protected static function getUserError() {
         return isset(static::$requestParameters[static::ERROR_REQUEST_NAME]) ?
                 static::$requestParameters[static::ERROR_REQUEST_NAME] : null;
     }
@@ -71,8 +67,7 @@ abstract class Controller implements Controller\DefaultRequestValuesINT, Control
      * @param type $requestCode
      * @since 18-03-30
      */
-    public static function configGetRequest($callable, $requestCode = null)
-    {
+    public static function configGetRequest($callable, $requestCode = null) {
         return self::configRequestHandler("GET", $callable, $requestCode);
     }
 
@@ -82,8 +77,7 @@ abstract class Controller implements Controller\DefaultRequestValuesINT, Control
      * @param type $requestCode
      * @since 18-03-30
      */
-    public static function configPostRequest($callable, $requestCode = null)
-    {
+    public static function configPostRequest($callable, $requestCode = null) {
         return self::configRequestHandler("POST", $callable, $requestCode);
     }
 
@@ -97,10 +91,8 @@ abstract class Controller implements Controller\DefaultRequestValuesINT, Control
      * @since 18-02-17
      * @edit 18-03-30 
      */
-    private static function configRequestHandler($requestMethod, $callable, $requestCode = null)
-    {
-        switch (true)
-        {
+    private static function configRequestHandler($requestMethod, $callable, $requestCode = null) {
+        switch (true) {
             case (\is_callable($callable) == false):
                 \trigger_error($callable . " is not callable.", \E_USER_ERROR);
             case \is_null($requestCode):
@@ -120,8 +112,7 @@ abstract class Controller implements Controller\DefaultRequestValuesINT, Control
      * @edit 19-02-02
      * - Debuged method 
      */
-    private static function runGetRequest()
-    {
+    private static function runGetRequest() {
         $parameters = self::$requestParameters;
         if (!isset($parameters[self::DEFAULT_REQUEST_NAME])) {
             $parameters[self::DEFAULT_REQUEST_NAME] = self::DEFAULT_REQUEST_VALUE;
@@ -139,8 +130,7 @@ abstract class Controller implements Controller\DefaultRequestValuesINT, Control
      * @edit 18-04-09
      * - Added error handlers
      */
-    private static function runPostRequest()
-    {
+    private static function runPostRequest() {
         if (!isset(self::$requestHandlers["POST"])) {
             \trigger_error("You must use configPostRequest in controller " . static::class, \E_USER_ERROR);
         }
@@ -162,8 +152,7 @@ abstract class Controller implements Controller\DefaultRequestValuesINT, Control
      * 
      * @since 18-02-23
      */
-    private static function sanitize(array $data)
-    {
+    private static function sanitize(array $data) {
 //        foreach ($data as $key => $value) {
 //            $data[$key] = \GIndie\DBHandler\MySQL::getConnection()->escape_string(\htmlspecialchars($value));
 //        }
@@ -176,11 +165,9 @@ abstract class Controller implements Controller\DefaultRequestValuesINT, Control
      * @return null|mixed
      * @since 18-03-29
      */
-    protected static function runUserRequest($requestMethod)
-    {
+    protected static function runUserRequest($requestMethod) {
         static::$response = null;
-        switch ($requestMethod)
-        {
+        switch ($requestMethod) {
             case "GET":
                 static::$requestParameters = self::sanitize($_GET);
                 static::$response = self::runGetRequest();
@@ -207,8 +194,7 @@ abstract class Controller implements Controller\DefaultRequestValuesINT, Control
      * @edit 18-03-29
      * - Exploded code into handleRequest()
      */
-    public static function run()
-    {
+    public static function run() {
         isset(self::$requestHandlers) ?: static::config();
         $DOM = static::getDOM();
         try {
@@ -226,9 +212,44 @@ abstract class Controller implements Controller\DefaultRequestValuesINT, Control
      * 
      * @since 18-02-20
      */
-    protected static function getDOM()
-    {
-        return View\DOM::instanceWithWebSources("");
+    protected static function getDOM() {
+        $dom = View\DOM::instanceWithWebSources("");
+        $dom->getBody()->addContent(static::modalBackdropOnly());
+        $dom->addScriptOnDocumentReady(static::modalBackdropOnSubmit());
+        return $dom;
+    }
+
+    /**
+     * @since 21-06-30
+     * @return string
+     */
+    private static function modalBackdropOnly() {
+        \ob_start();
+        ?>
+        <div id="modalBackdropOnly" class="modal fade" tabindex="-1" role="dialog"></div>
+        <?php
+        $out = \ob_get_contents();
+        \ob_end_clean();
+        return $out;
+    }
+
+    /**
+     * @since 21-06-30
+     * @return string
+     */
+    private static function modalBackdropOnSubmit() {
+        \ob_start();
+        ?>
+        $("form").submit(function(){
+        $('#modalBackdropOnly').modal('show');
+        });
+        $("a").click(function(){
+        $('#modalBackdropOnly').modal('show');
+        });
+        <?php
+        $out = \ob_get_contents();
+        \ob_end_clean();
+        return $out;
     }
 
     /**
@@ -241,8 +262,7 @@ abstract class Controller implements Controller\DefaultRequestValuesINT, Control
      * 
      * @since 18-02-20
      */
-    protected static function widgetForm($title, \GIndie\ScriptGenerator\Dashboard\FormInput\Form $form, $submit = false)
-    {
+    protected static function widgetForm($title, \GIndie\ScriptGenerator\Dashboard\FormInput\Form $form, $submit = false) {
         $widget = new \GIndie\ScriptGenerator\Dashboard\Widget\FormWidget($form, $submit);
         $widget->getHeading()->setTitle($title);
         if (static::getUserError() !== null) {

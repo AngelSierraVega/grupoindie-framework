@@ -9,7 +9,7 @@
  *
  * @package \GIndie\Framework\View
  *
- * @version 00.A4
+ * @version 00.A5
  * @since 18-02-17
  */
 
@@ -28,16 +28,14 @@ use GIndie\ScriptGenerator\Bootstrap3;
  * - Upgraded class dockblock
  * - Created buttonSubmitForm()
  */
-class FormInput extends \GIndie\ScriptGenerator\Dashboard\FormInput
-{
+class FormInput extends \GIndie\ScriptGenerator\Dashboard\FormInput {
 
     /**
      * @since 18-04-09
      * 
      * @return \GIndie\Framework\View\FormInput\Form
      */
-    public static function form()
-    {
+    public static function form() {
         return new FormInput\Form();
     }
 
@@ -51,10 +49,9 @@ class FormInput extends \GIndie\ScriptGenerator\Dashboard\FormInput
      * @since 18-02-17
      * @edit 18-02-20
      */
-    public static function formGetOnCustom($formId, $customTarget)
-    {
+    public static function formGetOnCustom($formId, $customTarget) {
         $form = parent::formGetOnCustom($formId, $customTarget)->addInput(static::inputHidden(\GIndie\Framework\Controller::DEFAULT_REQUEST_NAME,
-                $formId));
+                        $formId));
         //$form->addScript("$(\"#{$formId}\").validate({debug: false});");
         return $form;
     }
@@ -68,10 +65,9 @@ class FormInput extends \GIndie\ScriptGenerator\Dashboard\FormInput
      * @since 18-02-17
      * @edit 18-02-20
      */
-    public static function formGetOnSelf($formId)
-    {
+    public static function formGetOnSelf($formId) {
         $form = parent::formGetOnSelf($formId)->addInput(static::inputHidden(\GIndie\Framework\Controller::DEFAULT_REQUEST_NAME,
-                $formId));
+                        $formId));
         //$form->addScript("$(\"#{$formId}\").validate({debug: false});");
         return $form;
     }
@@ -86,10 +82,9 @@ class FormInput extends \GIndie\ScriptGenerator\Dashboard\FormInput
      * @since 18-02-17
      * @edit 18-02-20
      */
-    public static function formPostOnCustom($formId, $customTarget)
-    {
+    public static function formPostOnCustom($formId, $customTarget) {
         $form = parent::formPostOnCustom($formId, $customTarget)->addInput(static::inputHidden(\GIndie\Framework\Controller::DEFAULT_REQUEST_NAME,
-                $formId));
+                        $formId));
         //$form->addScript("$(\"#{$formId}\").validate({debug: false});");
         return $form;
     }
@@ -103,10 +98,9 @@ class FormInput extends \GIndie\ScriptGenerator\Dashboard\FormInput
      * @since 18-02-17
      * @edit 18-02-20
      */
-    public static function formPostOnSelf($formId)
-    {
+    public static function formPostOnSelf($formId) {
         $form = parent::formPostOnSelf($formId)->addInput(static::inputHidden(\GIndie\Framework\Controller::DEFAULT_REQUEST_NAME,
-                $formId));
+                        $formId));
         //$form->addScript("$(\"#{$formId}\").validate({debug: false});");
         return $form;
     }
@@ -120,13 +114,14 @@ class FormInput extends \GIndie\ScriptGenerator\Dashboard\FormInput
      * @return \GIndie\ScriptGenerator\Bootstrap3\Component\Button
      * @since 18-09-29
      */
-    public static function buttonSubmitForm($formId, $buttonContent, $name, $value)
-    {
+    public static function buttonSubmitForm($formId, $buttonContent, $name = null, $value = null) {
         $rtnBtn = new Bootstrap3\Component\Button($buttonContent, "submit");
-        $rtnBtn->addClass("btn-sm");
+        $rtnBtn->addClass("btn-sm"); 
         $rtnBtn->setForm($formId);
-        $rtnBtn->setAttribute("name", $name);
-        $rtnBtn->setValue($value);
+        if ($name !== null) {
+            $rtnBtn->setAttribute("name", $name);
+            $rtnBtn->setValue($value);
+        }
         return $rtnBtn;
     }
 

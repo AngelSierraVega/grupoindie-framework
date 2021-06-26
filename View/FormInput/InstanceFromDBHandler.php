@@ -35,10 +35,16 @@ class InstanceFromDBHandler
      */
     public static function getFormFilter($table,$columns)
     {
+        switch (true) {
+            case \is_subclass_of($table, \GIndie\Platform\Model\Record::class, false):
+//                var_dump("TEST");
+                break;
+            default:
+                break;
+        }
         if (\is_subclass_of($table, Table::class, false)) {
             $form = new Form();
             foreach ($columns as $columnName => $columnDefinition) {
-                
                 $ref = $table->referenceDefinition();
                 $foreignKeys = $ref->getForeignKeys();
                 if (\array_key_exists($columnName, $foreignKeys)) {
@@ -83,11 +89,14 @@ class InstanceFromDBHandler
      * @since 19-12-20
      * @edit 19-12-29
      */
-    public static function getForm($table)
+    public static function getForm($table,$columns =null)
     {
         if (\is_subclass_of($table, Table::class, false)) {
             $form = new Form();
-            foreach ($table->columns() as $columnName => $columnDefinition) {
+            if(\is_null($columns)){
+                $columns = $table->columns();
+            }
+            foreach ($columns as $columnName => $columnDefinition) {
                 $ref = $table->referenceDefinition();
                 $foreignKeys = $ref->getForeignKeys();
                 if (\array_key_exists($columnName, $foreignKeys)) {
@@ -154,7 +163,14 @@ class InstanceFromDBHandler
      */
     public static function getFormGroup($columnName, ColumnDefinition $columnDefinition)
     {
-        $label = $columnName;
+        switch ($columnDefinition->getComment()) {
+            case "":
+                $label = $columnName;
+                break;
+            default:
+                $label = $columnDefinition->getComment();
+                break;
+        }
         $name = $columnName;
 //        $formGroup = \GIndie\ScriptGenerator\Dashboard\FormInput::inputText($label, $name);
         //$formGroup = \GIndie\ScriptGenerator\Bootstrap3\FormInput\FormGroup::instance($label, $input);
